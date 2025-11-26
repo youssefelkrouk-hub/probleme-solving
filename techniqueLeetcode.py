@@ -1,5 +1,4 @@
 print("============Tow Pointer Technique ==============")
-
 def plaindrome(s):
     gauche,droite=0,len(s)-1
     while gauche<droite:
@@ -60,6 +59,23 @@ def trois_number(L,target):
 
 print(pairs([0,3,15,20],35))
 print(trois_number([1,2,3,4,5,6,7,8,10],18))
+
+print("=========Probleme Container With Most Water ==============")
+def maxArea(height):
+    left = 0
+    right = len(height) - 1
+    max_area = 0
+    while left < right:
+        # Calculer l'aire actuelle
+        current_area = min(height[left], height[right]) * (right - left)
+        max_area = max(max_area, current_area)
+        # Déplacer le pointeur de la hauteur minimale
+        if height[left] < height[right]:
+            left += 1
+        else:
+            right -= 1
+    return max_area
+print(maxArea([1,8,6,2,5,4,8,3,7]))  # Output: 49
 
 
 
