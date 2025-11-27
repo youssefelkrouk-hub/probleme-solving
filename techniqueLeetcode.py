@@ -75,7 +75,27 @@ def maxArea(height):
         else:
             right -= 1
     return max_area
-print(maxArea([1,8,6,2,5,4,8,3,7]))  # Output: 49
+print(maxArea([1,8,6,2,5,4,8,3,7]))  # Output: 49 # 1 et 8 qui forme le container le plus grand
+
+
+print("Mergin Two Sorted Arrays with TOW POINTER TECHNIQUE")
+
+def mergeArrays(arr1, arr2):
+    merged=[ ]
+    i,j=0,0
+    while i<len(arr1) and j<len(arr2):
+        if arr1[i]<arr2[j]:
+            merged.append(arr1[i])
+            i=i+1
+        else:
+            merged.append(arr2[j])
+            j=j+1
+    # merged.extend(arr1[i:]) # ajouter les elements restants de arr1 dés que la boucle while est terminée
+    # merged.extend(arr2[j:]) # ajouter les elements restants de arr2
+    return merged
+
+print(mergeArrays([1,3,5],[2,4,6,8,10])) # [1,2,3,4,5,6,8,10]
+
 
 
 
