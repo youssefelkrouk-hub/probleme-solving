@@ -122,10 +122,10 @@ print("Buttom up approach")
 
 def min_coins_dp(coins, amount):
     # Initialiser le tableau pour stocker le nombre minimum de pièces pour chaque montant
-    dp = [0] * (amount + 1)
+    dp = [0] * (amount + 1) # Initialiser avec une grande valeur pour représenter l'infini pour chaque montant
     dp[0]=0  # 0 pièces sont nécessaires pour faire le montant 0
     for i in range(1,amount+1):
-        dp[i]=float('inf')
+        dp[i]=10**8  # Initialiser avec une grande valeur pour représenter l'infini
         for coin in coins:
             if i-coin>=0:
                 dp[i]=min(dp[i],dp[i-coin]+1)
@@ -133,7 +133,7 @@ def min_coins_dp(coins, amount):
 
 # Exemple d'utilisation
 print(min_coins_dp([1, 5, 10, 25], 63))  # Output: 6 (2x25 + 1x10 + 3x1)
-print(min_coins_dp([1, 4, 5], -13))  # Output: 3  (2x4 + 1x5)
+print(min_coins_dp([1, 4, 5], 13))  # Output: 3  (2x4 + 1x5)
 print("Top Down Approach with Memoization")
 #Memoization is storing the results of expensive function calls and reusing them when the same inputs occur again.
 memo={}
@@ -142,7 +142,7 @@ def min_coins_td(coins,amount):
         return 0
     if amount in memo:
         return memo[amount]
-    min_coins=float('inf') #pour chaque montant, initialiser le nombre minimum de pièces à l'infini
+    min_coins=10**8 #pour chaque montant, initialiser le nombre minimum de pièces à l'infini 
     for coin in coins:
         if amount-coin>=0:
             num_coins=min_coins_td(coins,amount-coin) 
@@ -151,4 +151,6 @@ def min_coins_td(coins,amount):
     return memo[amount]
 
 print(min_coins_td([1, 4, 5], 13))  # Output: 3  (2x4 + 1x5)
-        
+print(min_coins_dp([1, 5, 10, 25], 63))  # Output: 6 (2x25 + 1x10 + 3x1)
+#Kruskal's Algorithm : trier les arêtes par poids croissant et ajouter les arêtes au MST en évitant les cycles jusqu'à ce que tous les sommets soient inclus.
+
