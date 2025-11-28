@@ -92,3 +92,63 @@ codes = huffman_codes(chars, freqs)
 print("Codes de Huffman :")
 for char in codes:
     print(f"{char}: {codes[char]}")
+
+
+
+print("Minumum Coin Problem")
+
+
+print("Battumin de pieces pour un montant donné en utilisant l'algorithme glouton")
+
+def minumum_coins_gloutoune(coins, amount):
+    coins.sort(reverse=True)  # Trier les pièces en ordre décroissant
+    count = 0
+    for coin in coins:
+        while amount >= coin:
+            amount -= coin
+            count += 1
+    if amount == 0:
+        return count
+    else:
+        return -1  # Impossible de faire le montant avec les pièces données
+# Exemple d'utilisation
+print(minumum_coins_gloutoune([1, 5, 10, 25], 63))  # Output: 6 (2x25 + 1x10 + 3x1)
+print(minumum_coins_gloutoune([1, 4, 5], 13)) 
+#dans le dernier exemple, l'algorithme glouton ne donne pas la solution optimale car il utilise 2 pièces de 5 et 3 pièces de 1 (total 5 pièces)
+#alors que la solution optimale est 3 pièces (2 pièces de 4 et 1 pièce de 5)
+
+print("Minmum coin par programmation dynamique")
+print("Buttom up approach")
+
+def min_coins_dp(coins, amount):
+    # Initialiser le tableau pour stocker le nombre minimum de pièces pour chaque montant
+    dp = [0] * (amount + 1)
+    dp[0]=0  # 0 pièces sont nécessaires pour faire le montant 0
+    for i in range(1,amount+1):
+        dp[i]=float('inf')
+        for coin in coins:
+            if i-coin>=0:
+                dp[i]=min(dp[i],dp[i-coin]+1)
+    return dp[amount]
+
+# Exemple d'utilisation
+print(min_coins_dp([1, 5, 10, 25], 63))  # Output: 6 (2x25 + 1x10 + 3x1)
+print(min_coins_dp([1, 4, 5], -13))  # Output: 3  (2x4 + 1x5)
+print("Top Down Approach with Memoization")
+#Memoization is storing the results of expensive function calls and reusing them when the same inputs occur again.
+memo={}
+def min_coins_td(coins,amount):
+    if amount==0:
+        return 0
+    if amount in memo:
+        return memo[amount]
+    min_coins=float('inf') #pour chaque montant, initialiser le nombre minimum de pièces à l'infini
+    for coin in coins:
+        if amount-coin>=0:
+            num_coins=min_coins_td(coins,amount-coin) 
+            min_coins=min(min_coins,num_coins+1) 
+    memo[amount]=min_coins
+    return memo[amount]
+
+print(min_coins_td([1, 4, 5], 13))  # Output: 3  (2x4 + 1x5)
+        
