@@ -118,7 +118,7 @@ print(minumum_coins_gloutoune([1, 4, 5], 13))
 #alors que la solution optimale est 3 pièces (2 pièces de 4 et 1 pièce de 5)
 
 print("Minmum coin par programmation dynamique")
-print("Buttom up approach")
+print("Buttom up approach ou Tabulation Approach")
 
 def min_coins_dp(coins, amount):
     # Initialiser le tableau pour stocker le nombre minimum de pièces pour chaque montant
@@ -126,10 +126,10 @@ def min_coins_dp(coins, amount):
     dp[0]=0  # 0 pièces sont nécessaires pour faire le montant 0
     for i in range(1,amount+1):
         dp[i]=10**8  # Initialiser avec une grande valeur pour représenter l'infini
-        for coin in coins:
-            if i-coin>=0:
-                dp[i]=min(dp[i],dp[i-coin]+1)
-    return dp[amount]
+        for coin in coins: #pour chaque pièce
+            if i-coin>=0: #si le montant courant moins la valeur de la pièce est non négatif
+                dp[i]=min(dp[i],dp[i-coin]+1) #mettre à jour le nombre minimum de pièces pour le montant i
+    return dp[amount] # retourner le nombre minimum de pièces pour le montant donné
 
 # Exemple d'utilisation
 print(min_coins_dp([1, 5, 10, 25], 63))  # Output: 6 (2x25 + 1x10 + 3x1)
@@ -154,3 +154,45 @@ print(min_coins_td([1, 4, 5], 13))  # Output: 3  (2x4 + 1x5)
 print(min_coins_dp([1, 5, 10, 25], 63))  # Output: 6 (2x25 + 1x10 + 3x1)
 #Kruskal's Algorithm : trier les arêtes par poids croissant et ajouter les arêtes au MST en évitant les cycles jusqu'à ce que tous les sommets soient inclus.
 
+print("Algorithm de Floyd-Warshall pour le plus court chemin entre toutes les paires de sommets dans un graphe pondéré:")
+# cette algorithme utilise la programmation dynamique pour trouver les plus courts chemins entre tous les paires de sommets dans un graphe pondéré.
+import numpy as np
+
+def floyd_warshall(graph):
+    # Initialiser la matrice des distances
+    # dist = [[float('inf')] * len(graph) for _ in range(len(graph))]
+    # for i in range(len(graph)):
+    #     for j in range(len(graph)):
+    #         if i == j:
+    #             dist[i][j] = 0
+    #         elif graph[i][j] != 0:
+    #             dist[i][j] = graph[i][j]
+    dist=graph.copy()
+    # Mettre à jour les distances en utilisant chaque sommet comme intermédiaire
+    for k in range(len(graph)):
+        for i in range(len(graph)):
+            for j in range(len(graph)):
+                dist[i,j]=min(dist[i][j],dist[i][k]+dist[k][j])
+                #if dist[i][j] > dist[i][k] + dist[k][j]:
+                    #dist[i][j] = dist[i][k] + dist[k][j]
+            
+    return dist
+
+
+
+
+# Exemple d'utilisation
+graph = np.array([[0, 3, float('inf'), 7],
+                  [8, 0, 2, float('inf')],
+                  [5, float('inf'), 0, 1],
+                  [2, float('inf'), float('inf'), 0]])
+shortest_paths = floyd_warshall(graph)
+print("Matrice des plus courts chemins entre toutes les paires de sommets :")
+print(shortest_paths)
+shortest_paths=np.array(
+[[0, 3, 5, 6],
+ [7, 0, 2, 3],
+ [3, 6, 0, 1],
+ [2, 5, 7, 0]]
+
+)
