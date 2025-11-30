@@ -106,37 +106,59 @@ L=[2,1,5,1,3,2]
 k=3
 print(sum_subarray(L, k))
 
-# def max_sum_subarray(arr, k):
-#     # somme des k premiers éléments
-#     window_sum = sum(arr[:k])
-#     max_sum = window_sum
+print("Version Ameliorer de Sliding Window technique ou la taille de la fenêtre est fixe")
+def max_sum_subarray(arr, k):
+    # somme des k premiers éléments
+    window_sum = sum(arr[:k])
+    max_sum = window_sum
     
-#     # glisser la fenêtre
-#     for i in range(k, len(arr)):
-#         window_sum += arr[i] - arr[i-k]
-#         max_sum = max(max_sum, window_sum)  
-#     return max_sum
+    # glisser la fenêtre
+    for i in range(k, len(arr)):
+        window_sum += arr[i] - arr[i-k]
+        max_sum = max(max_sum, window_sum)  
+    return max_sum
+#implementation alternative
+def summ(L,k):
+    current_sum=0
+    for i in range(k):
+        current_sum+=L[i]
+    max_sum=0
+    for i in range(k,len(L)):
+        current_sum=current_sum+L[i]-L[i-k]
+        max_sum=max(max_sum,current_sum)
+    return max_sum
 
+print("time complexity est O(k)+O(n-k)=O(n) or for the naive approach time complexity is O(n*k) ")
+L=[2,1,5,1,3,2]
+k=3
+print(summ(L,k))  # Output: 9
 
 print("=== Probleme Best time to Buy and Sell Stock ===")
-
+def version_naive(prices):
+    max_profits=0
+    n=len(prices)
+    for i in range(n):
+        for j in range(i+1,n):
+            current_profit=prices[i]-prices[j]
+            max_profits=max(max_profits,current_profit)
+    return max_profits
+#time complexity is O(n^2) very bad
 def maxProfit(prices):
     min_price = float('inf')  # Initialiser le prix minimum à l'infini
     max_profit = 0            # Initialiser le profit maximum à 0
     for price in prices:
-        # Mettre à jour le prix minimum si le prix actuel est inférieur
+        # Mettre à jour le prix minimum si le prix actuel est inférieur au prix minimum
         if price < min_price:
-            min_price = price
+            min_price = price 
         # Calculer le profit potentiel si on vendait au prix actuel
-        elif price - min_price > max_profit:
-            max_profit = price - min_price
+        max_profit =max(price - min_price, max_profit)
     return max_profit 
-
+#time complexity is O(n) and space complexity is O(1)
 print(maxProfit([7,1,5,3,6,4]))  # Output: 5 (Acheter à 1 et vendre à 6)
 
 
 
-print("Version Ameliorer")
+print(" Version Ameliorer ")
 def Besttime(L):
     left, n = 0, len(L)
     right, profit = 1, 0
@@ -148,4 +170,34 @@ def Besttime(L):
             left = right   
         right += 1
     return profit 
+
+#time complexity is O(n) and space complexity is O(1)
 print(Besttime([7,1,5,3,6,4]))  # Output: 5 (Acheter à 1 et vendre à 6)
+
+
+
+
+
+
+def merged_list(L1,L2):
+    merged,L=[],[]
+    i,j=0,0
+    while i<len(L1) and j<len(L2):
+        if L1[i]<L2[j]:
+            merged.append(L1[i])
+            i=i+1
+        else:
+            merged.append(L2[j])
+            j=j+1
+    merged.extend(L1[i:])
+    merged.extend(L2[j:])
+    for x  in merged:
+        if x!=0:
+            L.append(x)
+    return L
+
+print(merged_list([1,3,5,0,0,0],[2,4,6]))
+
+#time complexity is O(n+m) where n and m are the lengths of L1 and L2 respectively
+#space complexity is O(n+m) for the merged list
+

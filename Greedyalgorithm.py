@@ -158,6 +158,7 @@ print("Algorithm de Floyd-Warshall pour le plus court chemin entre toutes les pa
 # cette algorithme utilise la programmation dynamique pour trouver les plus courts chemins entre tous les paires de sommets dans un graphe pondéré.
 import numpy as np
 
+
 def floyd_warshall(graph):
     # Initialiser la matrice des distances
     # dist = [[float('inf')] * len(graph) for _ in range(len(graph))]
@@ -178,8 +179,8 @@ def floyd_warshall(graph):
             
     return dist
 
-
-
+#time complexity O(V^3) where V is the number of vertices in the graph
+#space complexity O(V^2) for storing the distance matrix
 
 # Exemple d'utilisation
 graph = np.array([[0, 3, float('inf'), 7],
@@ -196,3 +197,26 @@ shortest_paths=np.array(
  [2, 5, 7, 0]]
 
 )
+
+# le plus court chemin de 0 à 2 est 5 (0->1->2)
+# le plus court chemin de 3 à 2 est 7 (3->0->1->2)
+
+print("Plus longues sous-séquences communes (LCS) entre deux chaînes de caractères en utilisant la programmation dynamique")
+print("Solved by using recursion : ")
+
+def lcs_recursive(X, Y, m, n):
+    # Cas de base : si l'une des chaînes est vide
+    if m == 0 or n == 0:
+        return 0
+    # Si les derniers caractères sont les mêmes, ils font partie de la LCS
+    if X[m-1] == Y[n -1]:
+        return 1 + lcs_recursive(X, Y, m-1 , n -1)
+    else:
+        # Sinon, prendre le maximum entre deux cas :
+        # 1. Ignorer le dernier caractère de X
+        # 2. Ignorer le dernier caractère de Y
+        return max(lcs_recursive(X, Y, m, n - 1), lcs_recursive(X, Y, m - 1, n))
+    
+X = "AGGTAB"
+Y = "GXTXAYB"
+print("Length of LCS is ", lcs_recursive(X, Y, len(X), len(Y)))  # Output: 4 (GTAB)
