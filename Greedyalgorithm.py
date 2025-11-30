@@ -220,3 +220,77 @@ def lcs_recursive(X, Y, m, n):
 X = "AGGTAB"
 Y = "GXTXAYB"
 print("Length of LCS is ", lcs_recursive(X, Y, len(X), len(Y)))  # Output: 4 (GTAB)
+
+#time complexity is O(2^(m+n)) where m and n are the lengths of the two strings
+print("Solved by using Dynamic Programming :  Buttom Up Approach")
+
+def lcs_dp(X,Y):
+    m=len(X)
+    n=len(Y)
+    # Créer une matrice pour stocker les longueurs des LCS
+    L=[[0]*(n+1)for i in range(m+1)]
+    # Remplir la matrice L de bas en haut
+    for i in range(m+1):
+        for j in range(n+1):
+            if i==0 or j==0:
+                L[i][j]=0
+            elif X[i-1]==Y[j-1]:
+                L[i][j]=L[i-1][j-1]+1
+            else:
+                L[i][j]=max(L[i-1][j],L[i][j-1])
+    return L[m][n] #L[m][n] contient la longueur de la LCS de X et Y ainsi L[i][j] contient la longueur de la LCS de X[0..i-1] et Y[0..j-1]
+
+print("Length of LCS is ", lcs_dp(X, Y))  # Output: 4 (GTAB)
+#time complexity is O(m*n) where m and n are the lengths of the two strings
+#space complexity is O(m*n) for storing the L matrix
+def affichage_lcs(X,Y):
+    m=len(X)
+    n=len(Y)
+    L=[[0]*(n+1)for i in range(m+1)]
+    for i in range(m+1):
+        for j in range(n+1):
+            if i==0 or j==0:
+                L[i][j]=0
+            elif X[i-1]==Y[j-1]:
+                L[i][j]=L[i-1][j-1]+1
+            else:
+                L[i][j]=max(L[i-1][j],L[i][j-1])
+    index=L[m][n]
+    lcs=[""]*(index+1)
+    lcs[index]=""
+    i=m
+    j=n
+    while i>0 and j>0:
+        if X[i-1]==Y[j-1]:
+            lcs[index-1]=X[i-1]
+            i-=1
+            j-=1
+            index-=1
+        elif L[i-1][j]>L[i][j-1]:
+            i-=1
+        else:
+            j-=1
+    return "".join(lcs)
+print("LCS is ", affichage_lcs(X, Y))  # Output: GTAB
+
+print("Activity Selection Problem using Greedy Algorithm")      
+def activity_selection(start, end):
+    n = len(start)
+    # Trier les activités en fonction de leur temps de fin
+    activities = sorted(zip(start, end), key=lambda x: x[1])
+    
+    selected_activities = []
+    last_end_time = 0
+    
+    for s, e in activities:
+        if s >= last_end_time:
+            selected_activities.append((s, e))
+            last_end_time = e
+            
+    return selected_activities
+
+# Exemple d'utilisation
+start_times = [1, 3, 0, 5, 8, 5]
+end_times = [2, 4, 6, 7, 9, 9]
+selected = activity_selection(start_times, end_times)
+print("Selected activities (start, end):", selected)  # Output: [(1, 2), (3, 4), (5, 7), (8, 9)]
