@@ -105,6 +105,7 @@ def sum_subarray(L, k):
 L=[2,1,5,1,3,2]
 k=3
 print(sum_subarray(L, k))
+#time complexity is O(n*k) car on a une boucle imbriquée
 
 print("Version Ameliorer de Sliding Window technique ou la taille de la fenêtre est fixe")
 def max_sum_subarray(arr, k):
@@ -195,9 +196,27 @@ def merged_list(L1,L2):
         if x!=0:
             L.append(x)
     return L
+    
 
 print(merged_list([1,3,5,0,0,0],[2,4,6]))
 
 #time complexity is O(n+m) where n and m are the lengths of L1 and L2 respectively
 #space complexity is O(n+m) for the merged list
+print("======= Longest Substring Without Repeating Characters With Daynamic Sliding Window  =======")
 
+def lengthOfLongestSubstring(s):
+    n=len(s)
+    gauche=0
+    max_sum_subarray=0
+    Q=set()
+    for droite in range(n):
+        while s[droite] in Q:
+            Q.remove(s[gauche])
+            gauche+=1
+        Q.add(s[droite])
+        max_sum_subarray=max(max_sum_subarray,droite-gauche+1)
+    return max_sum_subarray
+
+print(lengthOfLongestSubstring("abcabcbb"))  # Output: 3
+print(lengthOfLongestSubstring("bbbbb"))     # Output: 1
+print(lengthOfLongestSubstring("pwwkew"))    # Output: 3

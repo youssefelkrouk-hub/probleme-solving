@@ -262,7 +262,7 @@ def affichage_lcs(X,Y):
     j=n
     while i>0 and j>0:
         if X[i-1]==Y[j-1]:
-            lcs[index-1]=X[i-1]
+            lcs[index-1]=Y[j-1]
             i-=1
             j-=1
             index-=1
@@ -294,3 +294,47 @@ start_times = [1, 3, 0, 5, 8, 5]
 end_times = [2, 4, 6, 7, 9, 9]
 selected = activity_selection(start_times, end_times)
 print("Selected activities (start, end):", selected)  # Output: [(1, 2), (3, 4), (5, 7), (8, 9)]
+
+
+print("====Backtracking Algorithms====")
+
+# print("N-Queens Problem using Backtracking")
+# def is_safe(board, row, col, n):
+#     # Vérifier la colonne
+#     for i in range(row):
+#         if board[i][col] == 1:
+#             return False
+#     # Vérifier la diagonale gauche
+#     for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
+#         if board[i][j] == 1:
+#             return False
+#     # Vérifier la diagonale droite
+#     for i, j in zip(range(row, -1, -1), range(col, n)):
+#         if board[i][j] == 1:
+#             return False
+#     return True
+
+# def solve_n_queens_util(board, row, n, solutions):
+#     if row >= n:
+#         solutions.append([''.join('Q' if cell == 1 else '.' for cell in r) for r in board])
+#         return
+#     for col in range(n):
+#         if is_safe(board, row, col, n):
+#             board[row][col] = 1  # Placer la reine
+#             solve_n_queens_util(board, row + 1, n, solutions)
+#             board[row][col] = 0  # Retirer la reine (backtrack)
+# def solve_n_queens(n):
+#     board = [[0 for _ in range(n)] for _ in range(n)]
+#     solutions = []
+#     solve_n_queens_util(board, 0, n, solutions)
+#     return solutions
+# # Exemple d'utilisation
+# n = 4
+# solutions = solve_n_queens(n)
+# print(f"Number of solutions for {n}-Queens:", len(solutions))
+# for sol in solutions:
+#     for row in sol:
+#         print(row)
+#     print()
+
+
