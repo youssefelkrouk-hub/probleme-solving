@@ -220,3 +220,46 @@ def lengthOfLongestSubstring(s):
 print(lengthOfLongestSubstring("abcabcbb"))  # Output: 3
 print(lengthOfLongestSubstring("bbbbb"))     # Output: 1
 print(lengthOfLongestSubstring("pwwkew"))    # Output: 3
+
+
+
+
+# if __name__ == '__main__':
+#     N = int(input())
+#     L = []
+#     for i in range(N):
+#         ligne = input()
+#         b = ligne.split()
+#         h = b[0]
+#         if h=="insert":
+#             L.insert(int(b[1]), int(b[2]))
+#         if h=="print":
+#             print(L)
+#         if h=="remove":
+#             L.remove(int(b[1]))
+#         if h=="pop":
+#             if len(b)==1:
+#                 L.pop()
+#             else:
+#                 L.pop(int(b[1]))
+#         if h=="reverse":
+#             L.reverse()
+#         if h=="sort":
+#             L.sort( )
+#         if h == "append":
+#             L.append(int(b[1]))
+     
+
+
+ # même valeur de hachage que la première
+
+import hashlib
+
+texte="Bonjour Youssef"
+# Calcul du hash SHA256
+empreinte = hashlib.sha256(texte.encode()).hexdigest()
+print(empreinte)
+
+
+t=(1,12)
+print(hash(t))
