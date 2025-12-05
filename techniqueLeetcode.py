@@ -253,13 +253,61 @@ print(lengthOfLongestSubstring("pwwkew"))    # Output: 3
 
  # même valeur de hachage que la première
 
-import hashlib
 
-texte="Bonjour Youssef"
-# Calcul du hash SHA256
-empreinte = hashlib.sha256(texte.encode()).hexdigest()
-print(empreinte)
+'''
+Given an integer numRows, return the first numRows of Pascal's triangle.
 
+In Pascal's triangle, each number is the sum of the two numbers directly above it as shown below:
+      1
+     1 1
+    1 2 1
+   1 3 3 1
+  1 4 6 4 1
+ 1 5 10 10 5 1
+'''
 
-t=(1,12)
-print(hash(t))
+print("======= Pascal's Triangle =======")
+class Solution:
+    def generate(self, numRows: int) :
+        output = []
+        if numRows < 1:
+            return output
+        
+        for i in range(numRows):
+            output.append([])
+            for j in range(i + 1):
+                if j == 0 or j == i:
+                    output[i].append(1)
+                else:
+                    output[i].append(output[i - 1][j - 1] + output[i - 1][j])
+        return output
+# Exemple d'utilisation
+sol = Solution()
+print(sol.generate(5))  # Output: [[1], [1, 1], [1, 2, 1], [1, 3, 3, 1], [1, 4, 6, 4, 1]]
+
+print("Merge Sorted Array")
+#l'idée est de remplir le tableau nums1 à partir de la fin pour éviter d'écraser les éléments existants
+#on initialise un pointeur last à la fin de nums1, puis on compare les éléments de nums1 et nums2 en partant de la fin
+#on place le plus grand élément à la position last et on décrémente le pointeur last
+#on continue jusqu'à ce que tous les éléments de nums2 soient placés dans nums1
+#si des éléments restent dans nums2, on les copie dans nums1
+#le temps d'exécution est O(m+n) où m et n sont les tailles de nums1 et nums2 respectivement 
+ 
+def merge(nums1, m, nums2, n):
+    last= m+n-1
+    while m>0 and n>0:
+        if nums1[m-1]>nums2[n-1]:
+            nums1[last]=nums1[m-1]
+            m-=1    
+        else:
+            nums1[last]=nums2[n-1]
+            n-=1
+        last-=1
+    # Remplir nums1 avec les éléments restants de nums2
+    while n>0:
+        nums1[last]=nums2[n-1]
+        n-=1
+        last-=1
+    return nums1
+
+print(merge([1,2,3,0,0,0],3,[2,5,6],3))  # Output: [1,2,2,3,5,6]
