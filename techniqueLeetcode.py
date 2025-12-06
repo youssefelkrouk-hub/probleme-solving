@@ -266,6 +266,7 @@ print(lengthOfLongestSubstring("pwwkew"))    # Output: 3
 
 
 print("Container With Most Water")
+
 def maxArea(height):
     gauche=0
     droite=len(height)-1
@@ -283,6 +284,98 @@ def maxArea(height):
         max_area=max(max_area,current_area)
     return max_area
 print(maxArea([1,8,6,2,5,4,8,3,7]))  # Output: 49  # 1 et 8 qui forme le container le plus grand
+
+print("Backtracking algorithm ")
+# this aproach is used to solve problems like generating permutations, combinations, and subsets
+# it allows 
+class solution_backtracking:
+    def sum_sebset(target,set):
+        if target==0:
+            return True
+        if target<0 or set==[ ]:
+            return False
+    # il existe deux cas :
+         #soit il existe un sous-ensemble qui inclut x telque la somme des éléments est égale à target - x
+         #soit il existe un sous-ensemble qui n'inclut pas x telque la somme des éléments est égale à target
+        for x in set:
+            T={elt for elt in set if elt!= x}
+            # si on utilise T.remove(x) ,T is None car la methode remove ne retourne rien
+            include_x=solution_backtracking.sum_sebset(target - x, T)
+            exclude_x=solution_backtracking.sum_sebset(target, T)
+            return include_x or exclude_x
+        return False 
+
+
+
+# Exemple d'utilisation
+print(solution_backtracking.sum_sebset(9,[3,34,4,12,5,2]))  # Output: True (4+5=9)
+
+        
+# but time complexity is O(2^n) where n is the number of elements in the set
+# space complexity is O(n) for the recursion stack 
+print("A noter que ce probléme est un probléme NP-complet  c'est à dire qu'il n'existe pas d'algorithme polynomial pour le résoudre ou du moins on ne le connait pas encore :")
+
+print(" DP approach for subset sum problem ")
+
+
+class solution_dp:
+    def subset_sum(target, set):
+        n=len(set)
+        dp=[[False for _ in range(target+1)] for _ in range(n+1)]
+        #dp [i][j] will be True if there is a subset of set[0..i-1] with sum equal to j:
+        for i in range(n+1):
+            dp[i][0]=True
+        for i in range(1,n+1):
+            for j in range(1,target+1):
+                if set[i-1]<=j:
+                    #ie set[i-1] contribue dans la somme qui donne j il existe 2 cas possibles
+                    # soit l'exclure  ie la somme des set[0,..,i-2] donne j 
+                    # soit l'inclure ie la somme des set[0,..,i-1] donne j-(set[i-1]) 
+                    dp[i][j]=dp[i-1][j] or dp[i-1][j-set[i-1]]
+                else:
+                    # ie set[i-1] est  plus grand que j(le target) donc il ne peut contribuer dans la some qui donne j
+                    dp[i][j]=dp[i-1][j]
+        return dp[n][target]  #on retourne la valeur dans la derniere case du tableau dp qui indique si il existe un sous-ensemble de l'ensemble set avec la somme égale à target 
+#time complexity is O(n*target) and space complexity is O(n*target) 
+print(solution_dp.subset_sum(9,[3,34,4,12,5,2]))  # Output: True (4+5=9)
+
+
+
+
+def dp_solution(set,target):
+    n=len(set)
+    dp=[[False]*(target+1) for j in range(n+1)]
+    #les cas de base 
+    for i in range(n+1):
+        dp[i][0]=True
+    dp[0][set[0]]=True # c'est le cas ou set={set[0]} et le target is set[0]
+    for i in range(1,n+1):
+        for j  in range(1,target+1):
+            if set[i-1]<=j:
+                dp[i][j]= dp[i-1][j-set[i-1]] or dp[i-1][j]
+            else:
+                dp[i][j]=dp[i-1][j]
+    return dp[n][target]
+
+print(dp_solution([3,34,4,12,5,2],9))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # if __name__ == '__main__':
