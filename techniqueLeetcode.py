@@ -143,7 +143,9 @@ def version_naive(prices):
             current_profit=prices[i]-prices[j]
             max_profits=max(max_profits,current_profit)
     return max_profits
+print
 #time complexity is O(n^2) very bad
+print(" ")
 def maxProfit(prices):
     min_price = float('inf')  # Initialiser le prix minimum à l'infini
     max_profit = 0            # Initialiser le profit maximum à 0
@@ -159,10 +161,11 @@ print(maxProfit([7,1,5,3,6,4]))  # Output: 5 (Acheter à 1 et vendre à 6)
 
 
 
+
 print(" Version Ameliorer ")
 def Besttime(L):
-    left, n = 0, len(L)
-    right, profit = 1, 0
+    profit, n = 0, len(L)
+    right, left= 1, 0 #right is the selling day and left is the buying day 
     while right < n:
         current_profit = L[right] - L[left]
         profit = max(profit, current_profit)
@@ -172,8 +175,45 @@ def Besttime(L):
         right += 1
     return profit 
 
+class solution:
+    def max_profit(self,prices):
+        maxprofit,n=0,len(prices)
+        left,right=0,1
+        while right<n:
+            #voir si on a un profit
+            if prices[left]<prices[right]:
+                current_profit=prices[right]-prices[left]
+                maxprofit=max(maxprofit,current_profit)
+            else:
+                left=right
+            right+=1
+        return maxprofit
+    
+sol=solution()
+print(sol.max_profit([7,1,5,3,6,4]))  # Output: 5 (Acheter à 1 et vendre à 6)
 #time complexity is O(n) and space complexity is O(1)
 print(Besttime([7,1,5,3,6,4]))  # Output: 5 (Acheter à 1 et vendre à 6)
+
+print(" Version pour plusieurs transactions  c'est a dire on peut acheter et vendre plusieurs fois ")
+#l'idee est de sommer toutes les augmentations successives des prix 
+#par exemple si les prix sont [7,1,5,3,6,4]
+#on peut acheter à 1 et vendre à 5 (profit de 4), puis acheter à 3 et vendre à 6 (profit de 3)
+#le profit total est de 4+3=7
+
+def profit(prices):
+    n=len(prices)
+    profit=0
+    for i in range(n-1):
+        if prices[i+1]>prices[i]:
+            profit+=prices[i+1]-prices[i]
+    return profit
+print(profit([7,1,5,3,6,4]))  #output: 7 (Acheter à 1, vendre à 5, acheter à 3, vendre à 6)
+
+
+
+
+
+
 
 
 
@@ -190,19 +230,23 @@ def merged_list(L1,L2):
         else:
             merged.append(L2[j])
             j=j+1
+    for k in range(i,len(L1)):
+        merged.append(L1[k])
+    for k in range(j,len(L2)):
+        merged.append(L2[k])
+    #ou bien on peut utiliser extend
     merged.extend(L1[i:])
     merged.extend(L2[j:])
-    for x  in merged:
-        if x!=0:
-            L.append(x)
-    return L
-    
+    return merged
+
 
 print(merged_list([1,3,5,0,0,0],[2,4,6]))
-
 #time complexity is O(n+m) where n and m are the lengths of L1 and L2 respectively
 #space complexity is O(n+m) for the merged list
 print("======= Longest Substring Without Repeating Characters With Daynamic Sliding Window  =======")
+
+
+
 
 def lengthOfLongestSubstring(s):
     n=len(s)
@@ -216,12 +260,29 @@ def lengthOfLongestSubstring(s):
         Q.add(s[droite])
         max_sum_subarray=max(max_sum_subarray,droite-gauche+1)
     return max_sum_subarray
-
 print(lengthOfLongestSubstring("abcabcbb"))  # Output: 3
 print(lengthOfLongestSubstring("bbbbb"))     # Output: 1
 print(lengthOfLongestSubstring("pwwkew"))    # Output: 3
 
 
+print("Container With Most Water")
+def maxArea(height):
+    gauche=0
+    droite=len(height)-1
+    max_area=0
+    while gauche<droite:
+        #on determine la hauteur minimale entre les deux pointeurs puisque l'eau ne peut pas depasser la hauteur minimale
+        if height[gauche]<height[droite]:
+            current_area=(droite-gauche)*height[gauche]
+            #on deplace le pointeur gauche pour essayer d'augmenter la hauteur minimale
+            gauche+=1
+        else:
+            current_area=(droite-gauche)*height[droite]
+            #on deplace le pointeur droite pour essayer d'augmenter la hauteur minimale
+            droite-=1
+        max_area=max(max_area,current_area)
+    return max_area
+print(maxArea([1,8,6,2,5,4,8,3,7]))  # Output: 49  # 1 et 8 qui forme le container le plus grand
 
 
 # if __name__ == '__main__':
@@ -266,6 +327,7 @@ In Pascal's triangle, each number is the sum of the two numbers directly above i
  1 5 10 10 5 1
 '''
 
+
 print("======= Pascal's Triangle =======")
 class Solution:
     def generate(self, numRows: int) :
@@ -285,6 +347,7 @@ class Solution:
 sol = Solution()
 print(sol.generate(5))  # Output: [[1], [1, 1], [1, 2, 1], [1, 3, 3, 1], [1, 4, 6, 4, 1]]
 
+
 print("Merge Sorted Array")
 #l'idée est de remplir le tableau nums1 à partir de la fin pour éviter d'écraser les éléments existants
 #on initialise un pointeur last à la fin de nums1, puis on compare les éléments de nums1 et nums2 en partant de la fin
@@ -293,9 +356,12 @@ print("Merge Sorted Array")
 #si des éléments restent dans nums2, on les copie dans nums1
 #le temps d'exécution est O(m+n) où m et n sont les tailles de nums1 et nums2 respectivement 
  
+
+
 def merge(nums1, m, nums2, n):
     last= m+n-1
     while m>0 and n>0:
+        #Comparer les éléments de nums1 et nums2 à partir de la fin
         if nums1[m-1]>nums2[n-1]:
             nums1[last]=nums1[m-1]
             m-=1    
@@ -309,5 +375,4 @@ def merge(nums1, m, nums2, n):
         n-=1
         last-=1
     return nums1
-
 print(merge([1,2,3,0,0,0],3,[2,5,6],3))  # Output: [1,2,2,3,5,6]
