@@ -357,10 +357,20 @@ def dp_solution(set,target):
                 dp[i][j]=dp[i-1][j]
     return dp[n][target]
 
+#the Bottum-up approach 
 print(dp_solution([3,34,4,12,5,2],9))
 
+#version amélioré 
 
+def dp_solution_amelioré(set,target):
+    dp=[False]*(target+1)
+    dp[0]=True
+    if len(set)==1 and target==set[0]:
+        dp[0]=True
+    for x in set:
 
+        
+        
 
 
 
