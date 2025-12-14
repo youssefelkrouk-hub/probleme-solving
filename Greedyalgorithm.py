@@ -357,19 +357,19 @@ class Solution:
 L=[-2,1,-3,4,-1,2,1,-5,4]
 print(Solution.maxSubArray(L))
 
-#sans utiliser une static method : 
+#sans utiliser une static method avec une autre aprroche  : 
 
 class Solution:
     def maxSubArray(self, nums):
-        max_sub=float('-inf')
-        current_sum=0
-        for num in nums:
-            current_sum+=num
-            max_sub=max(max_sub,current_sum)
+        max_sub=nums[0]
+        current_sum=nums[0]
+        for i in range(1,len(nums)):
             if current_sum<0:
-                current_sum=0
+                current_sum=nums[i]
+            else:
+                current_sum+=nums[i]
+            max_sub=max(max_sub,current_sum)
         return max_sub
-
 
 L=[-2,1,-3,4,-1,2,1,-5,4]
 print(Solution().maxSubArray(L)) 
