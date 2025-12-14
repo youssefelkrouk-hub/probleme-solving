@@ -298,6 +298,8 @@ print("Selected activities (start, end):", selected)  # Output: [(1, 2), (3, 4),
 
 print("====Backtracking Algorithms====")
 
+
+print("Youssef")
 # print("N-Queens Problem using Backtracking")
 # def is_safe(board, row, col, n):
 #     # Vérifier la colonne
@@ -338,3 +340,36 @@ print("====Backtracking Algorithms====")
 #     print()
 
 
+
+class Solution:
+    @staticmethod
+    def maxSubArray( nums):
+        max_sub=float('-inf')
+        current_sum=0
+        for num in nums:
+            current_sum+=num
+            max_sub=max(max_sub,current_sum)
+            if current_sum<0:
+                current_sum=0
+        return max_sub
+
+
+L=[-2,1,-3,4,-1,2,1,-5,4]
+print(Solution.maxSubArray(L))
+
+#sans utiliser une static method : 
+
+class Solution:
+    def maxSubArray(self, nums):
+        max_sub=float('-inf')
+        current_sum=0
+        for num in nums:
+            current_sum+=num
+            max_sub=max(max_sub,current_sum)
+            if current_sum<0:
+                current_sum=0
+        return max_sub
+
+
+L=[-2,1,-3,4,-1,2,1,-5,4]
+print(Solution().maxSubArray(L)) 
