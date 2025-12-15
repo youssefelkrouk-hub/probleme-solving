@@ -359,6 +359,7 @@ print(Solution.maxSubArray(L))
 
 #sans utiliser une static method avec une autre aprroche  : 
 
+
 class Solution:
     def maxSubArray(self, nums):
         max_sub=nums[0]
@@ -373,3 +374,5 @@ class Solution:
 
 L=[-2,1,-3,4,-1,2,1,-5,4]
 print(Solution().maxSubArray(L)) 
+
+
