@@ -44,7 +44,7 @@ def main():
     ht.insert(6, "banana")  # collision avec 1 (car 6 % 5 = 1)
     ht.insert(11, "cherry") # collision aussi (11 % 5 = 1)
     ht.insert(2, "orange")
-
+#Index 1: [[1, 'apple'], [6, 'banana'], [11, 'cherry']] contient une chaine 
     ht.display()
 
     print("Recherche clé 6:", ht.search(6))
@@ -53,3 +53,9 @@ def main():
 
 
 main()
+
+
+#le chainage sert a resoudre le probléme de collision (deux valeurs correspond aux memes clé ) en introduisant une Linked List : 
+#h(x)=key % self.size  function classique de hashage 
+#linrae probing : on introduit la nouvelle fonction de hashage h'(x)=[h(x)+i]% size for i=0,i=1,..
+#quadratic probing : on introduit h'(x)=[h(x)+i^2]%size for i ... 

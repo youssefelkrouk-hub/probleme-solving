@@ -299,7 +299,7 @@ print("Selected activities (start, end):", selected)  # Output: [(1, 2), (3, 4),
 print("====Backtracking Algorithms====")
 
 
-print("Youssef")
+
 # print("N-Queens Problem using Backtracking")
 # def is_safe(board, row, col, n):
 #     # Vérifier la colonne
