@@ -59,3 +59,27 @@ main()
 #h(x)=key % self.size  function classique de hashage 
 #linrae probing : on introduit la nouvelle fonction de hashage h'(x)=[h(x)+i]% size for i=0,i=1,..
 #quadratic probing : on introduit h'(x)=[h(x)+i^2]%size for i ... 
+
+# Simple test of how hash (dict) works in Python: Simple Operations 
+
+
+# Create an empty dictionary
+freq = {}
+
+# Sample list
+nums = [1, 2, 1, 3, 2, 1]
+
+# Count occurrences using dict
+for num in nums:
+    # .get(num, 0) returns current count or 0 if not present
+    freq[num] = freq.get(num, 0) + 1
+    print(f"After seeing {num}: {freq}")
+
+# Final dictionary
+print("Final frequency table:", freq)
+
+# Check majority element
+n = len(nums)
+for key, value in freq.items():
+    if value > n // 2:
+        print("Majority element is:", key)

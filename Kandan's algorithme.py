@@ -96,7 +96,7 @@ def findMedianSortedArrays(nums1,nums2):
     merged=nums1+nums2
     merged.sort()
     n=len(merged)
-    return (merged[n//2-1]+merged[n//2])/2 if n%2==0 else merged[n//2]
+    return (merged[n//2-1]+merged[n//2])/2 if n%2==0 else merged[n//2] 
 
 
 nums1 = [1, 3]
