@@ -574,3 +574,19 @@ def main():
     print(f'hash of 50 with table size 13 --> {hashing_by_division(k, m)}')
 
 main()
+
+
+# the enumurate method in python : 
+
+letters = ["a", "b", "c"]
+for index,letter in enumerate(letters):
+    print(index,letter)
+ # we use enumerate when we e care about the index of each element 
+
+# ---> Return Value: an enumerate object that yields pairs (index, element).
+
+
+d = {"a": 10, "b": 20}
+print(d.items()) # List of tuple
+for i, (k,v) in enumerate(d.items()):
+    print(i, k,v)
