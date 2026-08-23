@@ -590,3 +590,83 @@ d = {"a": 10, "b": 20}
 print(d.items()) # List of tuple
 for i, (k,v) in enumerate(d.items()):
     print(i, k,v)
+
+
+print("dsa:SET collection are very used in leetecode probelem some operation obout them :"," \n")
+
+# A set is a collection used to store unique values , Sets are useful when you want to remove duplicates
+# or perform operations like union ,intersection , and diffrence 
+# 2 Creating  a Set: 
+numbers={1,2,3,4,5}
+print(numbers,"\n")
+# to create  an empty set use this syntaxe , we don't use { } , this is for creating an empty dictionary
+empty_set=set()
+print(empty_set,"\n")
+
+# 3.Set store unique values:
+S={1,2,2,3,4,5}
+print(S) # --> {1,2,3,4,5}
+
+# 4.adding items: Use add() to add a single item to a set
+S.add(8)
+print(S,"\n")
+# Use update() to add multiple items 
+S.update([9,10,11])
+print(S,"\n")
+# 5.Removing Items: Use remove() or discard() to remove item from a set
+S.remove(9)
+print(S,"\n")
+# S.remove(20) 20 doesn't exist 
+print(S,"\n")
+# remove() raises an error if item doasn't exist , while discard() does not
+S.discard(11)
+print(S,"\n")
+# 6.cheking if an Itemx Exists:
+print(3 in S,"\n")
+print(20 in S,"\n")
+# --> cleaning a set
+print(S.clear(),"\n") # return None
+
+# 7.operatin
+# --> Union:
+a={1,2,3}
+b={1,2,5}
+result1=a|b
+print(result1,"\n")
+result2=a&b # intesrection
+print(result2,"\n")
+results3=b-a
+print(results3,"\n")
+
+# how to  count using a  dictionary 
+Counts={}
+for word in ["a","b","c","a"]:
+    Counts[word]=Counts.get(word,0)+1
+print(Counts)
+# an alternative of dict.get() method : 
+
+counts={}
+for elt in ["a","b","c","a"]:
+    if elt in counts:
+        counts[elt]+=1
+    else:
+        counts[elt]=1
+print(counts)
+
+# converting a string into a set
+s = "mississippi"
+unique_chars = set(s)
+print(unique_chars)        #{'m', 'i', 's', 'p'} this it return only the charcaters used in the 
+print(len(unique_chars))   # 4 — how many distinct letters
+
+print("the anagram check :  naive way ","\n")
+def anagram_check(t,s):
+    if len(t)!=len(s):
+        return False
+    return sorted(s)==sorted(t)
+
+
+s="rat"
+t="car"
+print(anagram_check(s,t))
+    
