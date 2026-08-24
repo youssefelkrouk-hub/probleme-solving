@@ -666,7 +666,30 @@ def anagram_check(t,s):
     return sorted(s)==sorted(t)
 
 
+
+
 s="rat"
 t="car"
-print(anagram_check(s,t))
+print("the time complexity of this is  O(nlogn) in the worst case : ",anagram_check(s,t),"\n")
+
+# Another idea : 
+
+def anagram_check_2_(t,s):
+    if len(s)!=len(t):
+        return False
+    count_t,count_s={},{}
+    for ch1 in t:
+        count_t[ch1]=count_t.get(ch1,0)+1
+    for ch2 in s:
+        count_s[ch2]=count_s.get(ch2,0)+1
+    return count_t==count_s
+
+## this solution use an extra me
+
+s="rat"
+t="car"
+print("Use hash maps to count character frequencies and compare them :  ",anagram_check_2_(s,t),"\n")
+
+
+    
     

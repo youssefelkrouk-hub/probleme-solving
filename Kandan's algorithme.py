@@ -136,3 +136,27 @@ def findMedianSortedArrays_optimal(nums1, nums2):
             low = partitionX + 1
 
 
+
+print("Longest Substring Without Repeating Characters : ","\n")
+
+# 6. Longest Substring Without Repeating Characters
+# Given a string s, find the length of the longest substring without repeating characters...
+
+def is_unique(sub):
+    return len(sub)==len(set(sub))
+
+def substring_longest(sub):
+    max_len=0
+    n=len(sub)
+    for i in range(n):
+        for j in range(i,n):
+            if is_unique(sub[i:j+1]): # if the slicing the j+1 is not inculuded , that's mean i--->j : 
+                max_len=max(max_len,j-i+1)
+    return max_len 
+
+
+s="pwwkew"
+print(substring_longest(s))
+
+sub="youssef"
+print(sub[1:3])

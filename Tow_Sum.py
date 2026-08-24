@@ -48,3 +48,28 @@ def tow_sum_2(numbers,target):
 nums = [2, 7, 11, 15]
 target = 9
 print("Using tow Pointers to solve the tow sum for an array that is sorted ",print(tow_sum_2(nums,target)),"\n")
+
+def tow_sum(nums,target):
+    map={}
+    for num in nums:
+        compliment=target-num 
+        if compliment in map: 
+            return [num,compliment]
+        map[num]=compliment
+
+nums=[4,7,1,9,3]
+target=10
+print("returnig the element not  only the index  using a  hashmap: ",tow_sum(nums,target) ,"\n")
+
+
+def tow_sum(nums,target):
+    map=set()
+    for num in nums:
+        compliment=target-num 
+        if compliment in map: 
+            return [num,compliment]
+        map.add(num)
+
+nums=[4,7,1,9,3]
+target=10
+print("returnig the element not  only the index  using a hash set : ",tow_sum(nums,target) ,"\n")
