@@ -207,3 +207,47 @@ def moveszero(nums):
 print("The optimized solution has the same O(n) time complexity, but unlike the naive version, it doesn't create any additional data structures that grow with input size. This means the space complexity is O(1) (constant extra space) :\n")
 L=[0,1,0,3,12]
 print(moveszero(L))
+
+
+
+
+
+def moves_zero_2(nums):
+    index=0
+    for num in nums:
+        if num!=0:
+            nums[index]=num # move the first number different of zero 
+            index+=1
+    for i in range(index,len(nums)):
+        nums[i]=0
+    return nums
+L=[0,0,3,12]  
+print("Using tow loops , still needs optimization",moves_zero_2(L))
+
+# the best solution and the optimized way :
+
+def moves_zero_3(nums):
+    i=0
+    for j in range(len(nums)):
+        if nums[j]!=0:
+            nums[i],nums[j]=nums[j],nums[i]
+            i+=1
+
+L=[1,0,3,12,0]   
+print("the optimized way : ",moves_zero_2(L),"\n")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    

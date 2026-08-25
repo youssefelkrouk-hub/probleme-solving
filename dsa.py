@@ -670,7 +670,7 @@ def anagram_check(t,s):
 
 s="rat"
 t="car"
-print("the time complexity of this is  O(nlogn) in the worst case : ",anagram_check(s,t),"\n")
+print("the time complexity of this is  O(nlogn) in the worst case :  ",anagram_check(s,t),"\n")
 
 # Another idea : 
 

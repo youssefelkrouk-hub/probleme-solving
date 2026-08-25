@@ -142,7 +142,7 @@ print("Longest Substring Without Repeating Characters : ","\n")
 # 6. Longest Substring Without Repeating Characters
 # Given a string s, find the length of the longest substring without repeating characters...
 
-def is_unique(sub):
+def is_unique(sub): # a helper  function to check the uniquness of charchters in a  subcharcter 
     return len(sub)==len(set(sub))
 
 def substring_longest(sub):
@@ -156,7 +156,97 @@ def substring_longest(sub):
 
 
 s="pwwkew"
-print(substring_longest(s))
+print("Space complexity: O(n) — for the temporary slice and the set built inside is_unique.Time complexity is O(n**3) too loop and cheking : ",substring_longest(s) ,"\n")
+
+
 
 sub="youssef"
-print(sub[1:3])
+print("slicing doean't includ the last index : ",sub[1:3],"\n")
+
+# Another brute force solution without using  any hekper funtion , but the time complexity O(n**2) , but aligne with the intuition of using a set for the seen characters: 
+
+def bruteforce_substring_longest(s):
+    max_len=0
+    n=len(s)
+    for i in range(n):
+        seen=set()
+        for j in range(i,n):
+            if s[j] in seen:
+                break
+            seen.add(s[j]) 
+            max_len=max(max_len,j-i+1)
+    return max_len
+
+s="tmmzuxt"
+print("using a set to add the seen character : ",bruteforce_substring_longest(s),"\n")
+
+
+
+# Approach 2: Sliding Window + Hash Set
+# Intuition
+# Maintain a window [left, right] that always contains unique characters. Expand it by moving right forward. When s[right] is already in the window, move left forward and remove characters from the set until the duplicate is gone, then add s[right].
+
+# A hash set holds the characters currently in the window, so the duplicate check is O(1).
+
+def Longets_substring_set(s):
+    left,max_len=0,0
+    seen=set()
+    for right in range(len(s)):
+        while s[right] in seen:
+            seen.remove(s[left])
+            left+=1
+        seen.add(s[right])
+        max_len=max(max_len,right-left+1)
+    return max_len
+
+s="tmmzuxt" 
+print("the optimized solution   using a hash set  : ",Longets_substring_set(s),"\n")
+
+# Instead of re-checking uniqueness from scratch for every substring (which is what made the naive version slow), 
+# you keep a running window [left, right] that represents your current substring, and a hash map that tells you instantly whether a character is already inside that window — and where.
+# Map key → the character
+# Map value → the last index where that character was seen
+
+# Approach 3: Sliding Window + Hash Map (Optimal)
+# Intuition
+# Replace the set with a hash map that stores the most recent index of each character. On a duplicate, move the left pointer directly past the previous occurrence instead of sliding it one step at a time.
+
+
+
+# When s[right] already exists in the map at index prevIndex, set left = max(left, prevIndex + 1). 
+# The max matters because left may already be past prevIndex from an earlier jump. 
+# Without it, left could move backward and re-include a character that was already removed from the window. 
+# Concretely, in "abba": after processing the second b, left is at index 2; 
+# reaching the final a finds its previous index 0, and max(2, 0 + 1) keeps left at 2 rather than rewinding to 1.
+
+
+def longest_substring(s):
+    left,max_len=0,0
+    seen_map={}
+    for right,ch in enumerate(s):
+        if ch in seen_map and seen_map[ch]>=left:
+            left=seen_map[ch]+1
+        seen_map[ch]=right   # else : add ch and his index to the seen_map 
+        max_len=max(max_len,right-left+1)   # always modify the max_len by the max between max_len and right-left+1
+    return max_len
+
+s="tmmzuxt" 
+print("the optimized solution   using a hash map table : ",longest_substring(s),"\n")
+
+
+print("another way ","\n")
+
+def longest_substring_2(s):
+    last_index={}
+    left,max_len=0,0
+    for right,c in enumerate(s):
+        if c in last_index and last_index[c]>=left:
+            left=last_index[c]+1
+        last_index[c]=right
+        max_len=max(max_len,right-left+1)
+    return max_len
+
+s="tmmzuxt" 
+print("Using a map : ",longest_substring_2(s),"\n")
+
+

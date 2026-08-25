@@ -108,6 +108,7 @@ print(s,"\n")
 s.clear()         # empty set now
 print(s,"\n")
 
+
 s |= {5, 6}       # in-place union, modifies s directly 
 print(s,"\n")
 print("frozenset (immutable) ❌: Once created you can't change it , or somthing ","\n")
@@ -115,6 +116,9 @@ empty = set()            # NOT {} — that's an empty dict!
 fs = frozenset([1, 2, 3])
 # fs.remove(1) #generate an error ,'frozenset' object has no attribute 'remove'
 # print(fs)
+
+
+
 
 
 
