@@ -8,6 +8,7 @@
 1. [Boyer–Moore Majority Vote Algorithm](#-boyermoore-majority-vote-algorithm)
 2. [Notes to Remember: set & dict Fundamentals](#-notes-to-remember-set--dict-fundamentals)
 3. [Sliding Window Technique: Longest Substring Without Repeating Characters](#-sliding-window-technique-longest-substring-without-repeating-characters)
+4. [Best Time to Buy and Sell Stock](#-best-time-to-buy-and-sell-stock-leetcode-121)
 
 ---
 
@@ -295,3 +296,113 @@ So the true bound is *whichever of the two is smaller*:
 | 3. Sliding window + `set` | **O(n)** | O(min(n, m)) | Never reset — shrink window one char at a time |
 | 4. Sliding window + hash map | **O(n)** | O(min(n, m)) | Jump `left` directly using last-seen index |
 
+---
+---
+
+# 📈 Best Time to Buy and Sell Stock (LeetCode 121)
+
+> Notes from working through **LeetCode 121 — Best Time to Buy and Sell Stock**, comparing brute force, greedy (min-tracking), and two-pointer approaches.
+
+## The problem
+Given `prices[i]` = the stock price on day `i`, find the **maximum profit** from **one buy + one sell**, where the sell day must come **after** the buy day (you cannot buy and sell on the same day, and you cannot sell before you buy).
+
+If no profit is possible (prices only decrease), the answer is `0` — you simply don't do the transaction.
+
+## The three approaches, in order of improvement
+
+### 1. Naive — check every pair of days
+```python
+def best_time_buy_sell(nums):
+    n = len(nums)
+    max_profit = 0
+    for i in range(n):
+        for j in range(i+1, n):
+            profit = nums[j] - nums[i]
+            max_profit = max(max_profit, profit)
+    return max_profit
+```
+- Outer loop `i` = every possible **buy day**, inner loop `j` (starting at `i+1`) = every possible **sell day after it**.
+- Generates all valid `(buy, sell)` pairs and keeps the best profit found.
+- **Time: O(n²)** — every pair of days is compared.
+- **Space: O(1)** — only `max_profit` is stored.
+
+This works, but it re-examines information you already know: once you've found the cheapest price so far, you don't need to re-compare against every earlier day again for each new `j`.
+
+---
+
+### 2. Greedy — track the minimum price seen so far
+```python
+def best_time_optimized(prices):
+    min_price = float('inf')
+    max_profit = 0
+    for i in range(len(prices)):
+        if prices[i] < min_price:      # new lowest buy price found
+            min_price = prices[i]
+        profit = prices[i] - min_price  # profit if sold today
+        max_profit = max(max_profit, profit)
+    return max_profit
+```
+**Key idea**: instead of comparing every pair, keep a **running minimum** of the cheapest price seen up to (and including) the current day.
+
+- `min_price` = best day to have bought, *so far*.
+- At each day `i`, compute: *"if I sold today, having bought at the cheapest point so far, what would my profit be?"* → `prices[i] - min_price`.
+- Because `min_price` only ever comes from a day **before or equal to** `i`, this naturally respects "buy before sell" without needing a nested loop.
+- One single pass replaces the need to re-scan previous days.
+
+**Time: O(n)** — one pass, one comparison + one subtraction per element.
+**Space: O(1)** — only two variables (`min_price`, `max_profit`).
+
+⚠️ **Why `if prices[i] < min_price` and not `<=`**: using `<=` wouldn't break correctness here (profit would just be `0` that day), but `<` is the natural/minimal condition — you only update the minimum when you find something strictly cheaper.
+
+---
+
+### 3. Two-pointer variant — `left` (buy) / `right` (sell)
+```python
+def another_way(prices):
+    n, max_profit = len(prices), 0
+    right, left = 1, 0
+    while right < n:
+        if prices[right] < prices[left]:
+            left = right
+        current_profit = prices[right] - prices[left]
+        max_profit = max(max_profit, current_profit)
+        right += 1
+    return max_profit
+```
+**Key idea**: this is the *same greedy logic* as version 2, reframed with two explicit pointers instead of a `min_price` variable.
+
+- `left` = index of the best day to buy so far (equivalent to where `min_price` currently is).
+- `right` = the day being considered as a potential sell day, always ahead of `left`.
+- If `prices[right] < prices[left]`, the current buy point is no longer optimal → move `left` to `right` (found a cheaper buy day).
+- Otherwise, compute the profit `prices[right] - prices[left]` and update `max_profit`.
+- `right` always moves forward one step at a time; `left` "jumps" to `right` only when a new minimum is found — it never moves backward.
+
+**Time: O(n)** — `right` traverses the array once; `left` only ever jumps forward.
+**Space: O(1)** — just two indices and one profit variable.
+
+### Why this is equivalent to the greedy `min_price` approach
+`prices[left]` **is** the minimum price so far — the pointer version is just storing the *index* of that minimum instead of the *value* directly. Both encode the exact same invariant: *"the best possible buy day up to the current point."*
+
+---
+
+## Common pitfall across all optimal versions
+```python
+# ❌ WRONG — comparing to a price seen AFTER the current day would violate "buy before sell"
+if prices[right] < prices[left] and right > left:   # redundant guard, right is always > left by construction here
+```
+This isn't actually a bug — just worth noting *why* it's safe: because `left` and `right` (or `min_price`) are only ever updated using **information already scanned**, the "buy must happen before sell" constraint is automatically respected. You never need to check `right > left` explicitly, since the loop structure guarantees it.
+
+## Complexity comparison — all three versions
+
+| Version | Time | Space | Key idea |
+|---|---|---|---|
+| 1. Naive (all pairs) | O(n²) | O(1) | Compare every buy day against every later sell day |
+| 2. Greedy (`min_price`) | **O(n)** | O(1) | Track cheapest price seen so far, compute profit at each step |
+| 3. Two-pointer (`left`/`right`) | **O(n)** | O(1) | Same greedy logic, expressed with index pointers instead of a value |
+
+## Test case worth remembering
+```python
+prices = [7, 6, 4, 3, 1]   # strictly decreasing → no profit possible
+best_time_optimized(prices)  # → 0
+```
+This is the classic edge case: if prices only go down, `max_profit` correctly stays at `0` because every `prices[i] - min_price` comparison ends up `≤ 0`, and `max()` never lets `max_profit` go negative.
