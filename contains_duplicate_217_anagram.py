@@ -4,9 +4,9 @@
 def contains_duplicate_map_1(nums):
     seen={}   # this way is  to initialize a empty dictionary not a set, for set we use : s=set()
     for index,num in enumerate(nums):
-        if num in seen:
+        if num in seen: 
             return [True,index]
-        seen[num]=index
+        seen[num]=index 
     return [False,None] 
         
 nums=[1,2,3,4]
@@ -14,6 +14,7 @@ print("using a map to store each number with his index  , with a list format [if
 
 def contains_duplicate_map_2(nums):
     map={}
+
     for num in nums:
         if num in map and map[num]>=1:
             return True
@@ -90,7 +91,11 @@ def last_contain_duplicate(nums):
 
 
 nums=[1,3,2,34,1]
-print("Converting a list into a set: ",last_contain_duplicate(nums))
+print("Converting a list into a set technique : ",last_contain_duplicate(nums))
+
+
+
+
 
 
 
