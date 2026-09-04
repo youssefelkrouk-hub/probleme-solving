@@ -65,6 +65,10 @@ print(" another Implmentation of Kandane's algorithm 3 : ",Max_subarray_v4(L),"\
 
 
 
+def sum(a,b):
+    return a+b
+
+print(sum(1,'2'))
 
         
 
