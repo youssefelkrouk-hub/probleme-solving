@@ -1,3 +1,9 @@
+# 🗺️NeetCode  Roadmap
+
+![NeetCode-style DSA Roadmap](./Neetcode_Roadmap.jfif)
+
+---
+
 # 🧠 DSA Notes: Algorithms, Data Structures & Complexity
 
 > Personal working notes — algorithm patterns, complexity analysis, and gotchas collected while solving problems.
