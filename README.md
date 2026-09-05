@@ -7,8 +7,9 @@
 ## Table of Contents
 1. [Boyer–Moore Majority Vote Algorithm](#-boyermoore-majority-vote-algorithm)
 2. [Notes to Remember: set & dict Fundamentals](#-notes-to-remember-set--dict-fundamentals)
-3. [Sliding Window Technique: Longest Substring Without Repeating Characters](#-sliding-window-technique-longest-substring-without-repeating-characters)
-4. [Best Time to Buy and Sell Stock](#-best-time-to-buy-and-sell-stock-leetcode-121)
+3. [Contains Duplicate II — Sliding Window (LeetCode 219)](#-contains-duplicate-ii--sliding-window-leetcode-219)
+4. [Sliding Window Technique: Longest Substring Without Repeating Characters](#-sliding-window-technique-longest-substring-without-repeating-characters)
+5. [Best Time to Buy and Sell Stock](#-best-time-to-buy-and-sell-stock-leetcode-121)
 
 ---
 
@@ -193,6 +194,119 @@ if counts[num] > 1:
 
 ## For anagram problem, the intuition is to transform each string into a set then compare, but:
 - Comparing two sets (`s1 == s2`) costs O(min(len(s1), len(s2))) on average — and the "how" is a nice mix of quick short-circuits plus hashing.
+
+---
+---
+
+# 🪟 Contains Duplicate II — Sliding Window (LeetCode 219)
+
+> Notes from working through **LeetCode 219 — Contains Duplicate II**, going from a hashmap-of-indices solution to an explicit sliding-window formulation, plus a brute-force O(n·k) baseline for comparison.
+
+## The problem
+Given an integer array `nums` and an integer `k`, return `true` if there are two **distinct indices** `i` and `j` such that `nums[i] == nums[j]` **and** `abs(i - j) <= k`.
+
+Unlike plain "Contains Duplicate" (LeetCode 217), a duplicate only counts if the two occurrences are **close enough together** (within a window of `k` positions) — a duplicate far apart in the array doesn't trigger `true`.
+
+## Core idea
+Don't compare every pair of equal values across the whole array — only care about duplicates **within a window of size k**. This naturally leads to a **sliding window**: keep track of just the "recent" elements (the last `k` seen), and forget anything older, since it can no longer satisfy `abs(i - j) <= k`.
+
+There are two equivalent ways to express this window:
+- **Implicitly**, via a hashmap that stores `value → last index seen`, and checking the distance directly.
+- **Explicitly**, via a `set` that only ever contains the elements currently "in range," maintained by adding/removing as the window slides.
+
+## The four approaches, in order explored
+
+### 1. Hashmap of last-seen indices (distance checked explicitly)
+```python
+def containsNearbyDuplicate(nums, k):
+    hash_map = {}
+    for index, num in enumerate(nums):
+        if num in hash_map and abs(hash_map[num] - index) <= k:
+            return True
+        hash_map[num] = index
+    return False
+```
+- Stores, for every value, the **index of its most recent occurrence**.
+- On seeing `num` again, checks if the distance to its last occurrence is `<= k`.
+- **Time: O(n)** average · **Space: O(min(n, k+1))** — at most one entry per distinct value in range.
+
+### 2. Sliding window with a `set`, using a `for` loop and index math
+```python
+def contain_dupli_sliding_window(nums, k):
+    window = set()
+    for i, num in enumerate(nums):
+        if num in window:
+            return True
+        window.add(num)
+        if len(window) > k:
+            window.remove(nums[i - k])
+    return False
+```
+- The set holds **only** the elements currently within the window, never a stale one — this is what makes the `in` check automatically respect `abs(i - j) <= k`, without computing any distance.
+- **Time: O(n)** average · **Space: O(min(n, k))**
+
+### 3. Sliding window with two explicit pointers (`while` loop)
+```python
+def containsNearbyDuplicate(nums, k):
+    window = set()
+    left = 0
+    right = 0
+    n = len(nums)
+
+    while right < n:
+        while right - left > k:      # shrink until window size <= k+1
+            window.remove(nums[left])
+            left += 1
+        if nums[right] in window:
+            return True
+        window.add(nums[right])
+        right += 1
+    return False
+```
+- Same logic as version 2, but the window boundaries are tracked explicitly with `left`/`right` instead of index arithmetic (`i - k`).
+- The inner `while` never runs more than once per outer step here (since `right` only advances by 1 at a time), so total time stays **O(n)** — each element is added/removed from the set at most once.
+- More general/robust pattern to have in your toolkit: in other sliding-window problems the window may need to shrink by more than one step per iteration, and `while` handles that; `if` would not.
+
+### 4. Brute force — bounded nested loop (no hash structure)
+```python
+def containsNearbyDuplicate(nums, k):
+    for i in range(len(nums)):
+        for j in range(max(0, i - k), i):
+            if nums[i] == nums[j]:
+                return True
+    return False
+```
+- For each `i`, only scans the **last `k` elements** before it — smarter than the full O(n²) brute force, but still re-scans a window instead of using a hash lookup.
+- **Time: O(n·k)** · **Space: O(1)** — trades time for zero extra memory.
+- Useful mainly to see *why* the hash-based versions help: same "look back at most k elements" idea, but a hash set turns each lookup from O(k) into O(1) average.
+
+## 🔑 Key tip: why we remove `nums[i - k]` specifically
+When processing index `i`, the **valid window** is `[i-k, i]` — that's `k+1` elements (the current one plus its `k` predecessors). So the set should never grow past `k+1` entries.
+
+The element that becomes stale is the one that will fall **outside** the window as soon as we move to `i+1`: at that point the valid window becomes `[i-k+1, i+1]`, and index `i-k` is exactly the one left behind. That's why the eviction target is always `nums[i - k]` — it's not an arbitrary offset, it's "the element exactly `k` steps behind the one we just added."
+
+Trace with `k=3`, `nums=[10,20,30,40,50]`:
+
+| i | num | window before | action | window after |
+|---|---|---|---|---|
+| 0 | 10 | {} | add 10 | {10} |
+| 1 | 20 | {10} | add 20 | {10,20} |
+| 2 | 30 | {10,20} | add 30 | {10,20,30} |
+| 3 | 40 | {10,20,30} | add 40 → size 4 > k(3) → remove `nums[3-3]=nums[0]=10` | {20,30,40} |
+| 4 | 50 | {20,30,40} | add 50 → size 4 > k(3) → remove `nums[4-3]=nums[1]=20` | {30,40,50} |
+
+After cleanup, the set always holds exactly the `k` most recent elements *before* the current candidate — so any hit found via `num in window` is guaranteed to satisfy `abs(i - j) <= k`.
+
+## Complexity comparison — all four versions
+| Version | Time | Space | Key idea |
+|---|---|---|---|
+| 1. Hashmap of last index | O(n) avg | O(min(n, k+1)) | Store last index per value, check distance directly |
+| 2. Sliding window + set (`for`, index math) | O(n) avg | O(min(n, k)) | Set only ever holds elements in range |
+| 3. Sliding window + set (two pointers, `while`) | O(n) avg | O(min(n, k)) | Same idea, window bounds tracked explicitly |
+| 4. Brute force (bounded nested loop) | O(n·k) | O(1) | No hash structure — same window idea, slower lookup |
+
+## Note on "O(1) average, not worst case"
+Hash set/dict operations (`in`, `add`, `remove`) are **O(1) on average**, not guaranteed worst case — collisions can in theory degrade a single operation to O(n), making the true worst case O(n²) for the hashmap/set versions. In practice (especially with `int` keys, as in this problem), Python's dynamic table resizing keeps the load factor low and collisions rare, so treating these as O(n) total is the standard and reasonable assumption for interview/LeetCode purposes.
 
 ---
 ---
