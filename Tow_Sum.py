@@ -70,14 +70,11 @@ def tow_sum_binary_search(nums,target):
                 left=mid+1
             else:
                 right=mid-1 
+    return [-1,-1]
                 
 nums=[-3,-1,0,2,4,6]
 target=3
 print("Using Binary search to catch the complement that w'ill add up with val = Target :  ",tow_sum_binary_search(nums,target),"\n")
-
-
-
-
 
 
 
